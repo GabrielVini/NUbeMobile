@@ -42,3 +42,14 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Backend Python e banco local
+backend/.venv/
+backend/.env
+backend/data/
+backend/backups/
+*.db
+*.db-shm
+*.db-wal
+__pycache__/
+*.py[cod]

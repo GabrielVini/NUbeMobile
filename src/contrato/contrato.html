@@ -1,0 +1,61 @@
+<header class="topbar no-print">
+  <a class="brand" href="#"><img src="/nobe-logo.png" alt="Nobe Estágios"></a>
+  <div class="header-copy"><span>Gerador de documentos</span><strong>Termo de Compromisso de Estágio</strong></div>
+  <div class="header-actions"><button class="button ghost" (click)="clearForm()">Limpar</button><button class="button primary" (click)="printContract()">⇩&nbsp; Gerar PDF</button><button class="mobile-menu" (click)="mobileMenuOpen=!mobileMenuOpen" aria-label="Abrir etapas">☰</button></div>
+</header>
+<main class="workspace">
+  <aside class="sidebar no-print">
+    <div class="progress-card"><div><span>Preenchimento</span><strong>{{progress}}%</strong></div><i><b [style.width.%]="progress"></b></i><small>{{completedFields}} de 17 campos essenciais</small></div>
+    <nav class="folder-tree">
+      <button class="folder-root" [class.open]="folderOpen" (click)="folderOpen=!folderOpen"><span class="folder-icon">▰</span><b>Contrato</b><i>⌄</i></button>
+      @if (folderOpen) { <div class="folder-children">@for (section of sections; track section.id) { <button [class.active]="activeSection===section.id" (click)="goTo(section.id)"><span>{{section.icon}}</span>{{section.label}}</button> }</div> }
+    </nav>
+    <div class="help-card"><b>?</b><span><strong>Precisa de ajuda?</strong><small>Preencha os campos e acompanhe o documento ao lado.</small></span></div>
+  </aside>
+  @if (mobileMenuOpen) { <div class="mobile-sheet no-print"><div class="sheet-head"><img src="/nobe-logo.png" alt="Nobe Estágios"><button (click)="mobileMenuOpen=false">×</button></div><p>Contrato</p>@for (section of sections; track section.id) { <button [class.active]="activeSection===section.id" (click)="goTo(section.id)"><span>{{section.icon}}</span>{{section.label}}</button> }</div><button class="sheet-backdrop no-print" aria-label="Fechar menu" (click)="mobileMenuOpen=false"></button> }
+  <section class="form-panel no-print">
+    <div class="form-intro"><span>NOVO CONTRATO</span><h1>Dados do estágio</h1><p>As informações aparecem no documento em tempo real.</p></div>
+    <form autocomplete="off">
+      <fieldset id="estagiario"><legend><b>01</b><span>Dados do estagiário<small>Informações pessoais e acadêmicas</small></span></legend><div class="grid">
+        <label class="wide">Nome completo *<input name="internName" [(ngModel)]="data.internName" placeholder="Ex.: Ana Carolina Souza"></label>
+        <label>CPF *<input name="internCpf" [(ngModel)]="data.internCpf" placeholder="000.000.000-00"></label><label>RG<input name="internRg" [(ngModel)]="data.internRg" placeholder="00.000.000-0"></label>
+        <label>Data de nascimento<input type="date" name="birthDate" [(ngModel)]="data.birthDate"></label><label>Telefone<input name="internPhone" [(ngModel)]="data.internPhone" placeholder="(00) 00000-0000"></label>
+        <label class="wide">Endereço completo *<input name="internAddress" [(ngModel)]="data.internAddress" placeholder="Rua, número, bairro, cidade/UF e CEP"></label>
+        <label>E-mail<input type="email" name="internEmail" [(ngModel)]="data.internEmail" placeholder="nome@email.com"></label><label>Curso *<input name="course" [(ngModel)]="data.course" placeholder="Ex.: Administração"></label>
+        <label>Matrícula<input name="registration" [(ngModel)]="data.registration" placeholder="Número de matrícula"></label>
+      </div><div class="step-action"><button type="button" class="button next" (click)="next('instituicao')">Continuar →</button></div></fieldset>
+      <fieldset id="instituicao"><legend><b>02</b><span>Instituição de ensino<small>Dados da interveniente acadêmica</small></span></legend><div class="grid">
+        <label class="wide">Razão social / Nome *<input name="educationInstitution" [(ngModel)]="data.educationInstitution" placeholder="Nome da instituição de ensino"></label><label>CNPJ<input name="institutionCnpj" [(ngModel)]="data.institutionCnpj" placeholder="00.000.000/0000-00"></label>
+      </div><div class="step-action"><button type="button" class="button next" (click)="next('empresa')">Continuar →</button></div></fieldset>
+      <fieldset id="empresa"><legend><b>03</b><span>Empresa concedente<small>Local onde o estágio será realizado</small></span></legend><div class="grid">
+        <label class="wide">Razão social *<input name="companyName" [(ngModel)]="data.companyName" placeholder="Nome da empresa concedente"></label><label>CNPJ *<input name="companyCnpj" [(ngModel)]="data.companyCnpj" placeholder="00.000.000/0000-00"></label>
+        <label class="wide">Endereço completo *<input name="companyAddress" [(ngModel)]="data.companyAddress" placeholder="Rua, número, bairro, cidade/UF e CEP"></label><label>Supervisor(a) *<input name="supervisor" [(ngModel)]="data.supervisor" placeholder="Nome completo"></label><label>Cargo do supervisor<input name="supervisorRole" [(ngModel)]="data.supervisorRole" placeholder="Ex.: Gerente administrativo"></label>
+      </div><div class="step-action"><button type="button" class="button next" (click)="next('estagio')">Continuar →</button></div></fieldset>
+      <fieldset id="estagio"><legend><b>04</b><span>Condições do estágio<small>Vigência, jornada e benefícios</small></span></legend><div class="grid">
+        <label>Data de início *<input type="date" name="startDate" [(ngModel)]="data.startDate"></label><label>Data de término *<input type="date" name="endDate" [(ngModel)]="data.endDate"></label>
+        <label>Horas semanais *<input type="number" name="weeklyHours" [(ngModel)]="data.weeklyHours" min="1" max="40"></label><label>Horário diário *<input name="dailySchedule" [(ngModel)]="data.dailySchedule"></label>
+        <label>Bolsa-auxílio mensal (R$) *<input name="scholarship" [(ngModel)]="data.scholarship" placeholder="Ex.: 1200,00"></label><label>Auxílio-transporte (R$)<input name="transportAllowance" [(ngModel)]="data.transportAllowance" placeholder="Ex.: 220,00"></label>
+        <label class="wide">Atividades do estágio *<textarea name="activities" [(ngModel)]="data.activities" rows="4" placeholder="Descreva as principais atividades..."></textarea></label><label>Cidade da assinatura *<input name="city" [(ngModel)]="data.city" placeholder="Ex.: São Paulo/SP"></label><label>Data da assinatura *<input type="date" name="signatureDate" [(ngModel)]="data.signatureDate"></label>
+      </div><div class="finish-card"><b>✓</b><span><strong>Pronto para revisar?</strong><small>Confira a prévia e gere o PDF.</small></span><button type="button" class="button primary" (click)="printContract()">Gerar PDF</button></div></fieldset>
+    </form>
+  </section>
+  <section class="preview-panel">
+    <div class="preview-toolbar no-print"><span><i></i><b>Pré-visualização</b><small>Atualização em tempo real</small></span><button (click)="printContract()">↗</button></div>
+    <article class="contract">
+      <div class="contract-brand"><img src="/nobe-logo.png" alt="Nobe Estágios"></div><div class="document-id">TERMO DE COMPROMISSO<br><span>DE ESTÁGIO</span></div><p class="contract-meta">Instrumento particular nos termos da Lei nº 11.788/2008</p>
+      <p>Pelo presente instrumento, as partes abaixo qualificadas:</p>
+      <div class="party"><b>CONCEDENTE:</b> <strong>{{value(data.companyName)}}</strong>, CNPJ nº {{value(data.companyCnpj,'__________________')}}, com sede em {{value(data.companyAddress)}}.</div>
+      <div class="party"><b>ESTAGIÁRIO(A):</b> <strong>{{value(data.internName)}}</strong>, CPF nº {{value(data.internCpf,'__________________')}}, residente em {{value(data.internAddress)}}, estudante de {{value(data.course,'__________________')}}.</div>
+      <div class="party"><b>INSTITUIÇÃO DE ENSINO:</b> <strong>{{value(data.educationInstitution)}}</strong>, CNPJ nº {{value(data.institutionCnpj,'__________________')}}.</div>
+      <p>Celebram o presente <b>Termo de Compromisso de Estágio</b>, mediante as cláusulas seguintes:</p>
+      <h2>CLÁUSULA 1ª — DO OBJETO</h2><p>O presente termo tem por objeto proporcionar ao(à) ESTAGIÁRIO(A) experiência prática e aperfeiçoamento técnico-profissional, em complementação ao ensino e à aprendizagem, sem caracterizar vínculo empregatício.</p>
+      <h2>CLÁUSULA 2ª — DA VIGÊNCIA E JORNADA</h2><p>O estágio vigorará de <b>{{date(data.startDate)}}</b> a <b>{{date(data.endDate)}}</b>, com jornada de <b>{{value(data.weeklyHours,'___')}} horas semanais</b>, cumprida {{value(data.dailySchedule,'em horário a definir')}}.</p>
+      <h2>CLÁUSULA 3ª — DAS ATIVIDADES</h2><p>Sob supervisão de <b>{{value(data.supervisor)}}</b>{{data.supervisorRole ? ', '+data.supervisorRole : ''}}, serão desenvolvidas as atividades: {{value(data.activities,'____________________________________________________________')}}.</p>
+      <h2>CLÁUSULA 4ª — DA BOLSA E BENEFÍCIOS</h2><p>A CONCEDENTE pagará bolsa-auxílio mensal de <b>{{money(data.scholarship)}}</b>{{data.transportAllowance ? ', além de auxílio-transporte de '+money(data.transportAllowance) : ''}}.</p>
+      <h2>CLÁUSULA 5ª — DAS RESPONSABILIDADES</h2><p>As partes comprometem-se a cumprir o plano de atividades, manter acompanhamento efetivo e observar a Lei nº 11.788/2008. O(A) ESTAGIÁRIO(A) compromete-se a agir com ética, assiduidade e sigilo profissional.</p>
+      <p>E, por estarem de acordo, firmam o presente instrumento.</p><p class="place-date">{{value(data.city,'________________________')}}, {{longDate(data.signatureDate)}}.</p>
+      <div class="signatures"><div><i></i><b>{{value(data.companyName,'EMPRESA CONCEDENTE')}}</b><small>Concedente</small></div><div><i></i><b>{{value(data.internName,'ESTAGIÁRIO(A)')}}</b><small>Estagiário(a)</small></div><div><i></i><b>{{value(data.educationInstitution,'INSTITUIÇÃO DE ENSINO')}}</b><small>Instituição de ensino</small></div></div>
+      <footer><b>Nobe Estágio</b><span>Documento gerado eletronicamente</span></footer>
+    </article><p class="legal-note no-print">Este documento é um modelo. Valide o texto com o responsável jurídico antes da assinatura.</p>
+  </section>
+</main>
