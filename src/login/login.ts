@@ -12,7 +12,7 @@ import { finalize, timeout } from 'rxjs';
   styleUrl: './login.css',
 })
 export class Login {
-  email = '';
+  code = '';
   password = '';
   remember = false;
   showPassword = false;
@@ -22,25 +22,27 @@ export class Login {
   successMessage = '';
 
   constructor(private readonly router: Router, private readonly route: ActivatedRoute, private readonly http: HttpClient, private readonly cdr: ChangeDetectorRef) {
-    if (this.route.snapshot.queryParamMap.get('cadastro') === 'sucesso') this.successMessage = 'Conta criada com sucesso. Você já pode entrar.';
+    if (this.route.snapshot.queryParamMap.get('senha') === 'alterada') this.successMessage = 'Senha alterada. Entre novamente para continuar.';
   }
 
   enter(): void {
     this.submitted = true;
     this.apiError = '';
-    if (!this.email.trim() || !this.password) return;
+    if (!/^\d{4}$/.test(this.code) || !this.password) return;
     this.loading = true;
-    this.http.post<{ nome: string }>('/api/auth/login', {
-      email: this.email.trim(), senha: this.password
+    this.http.post<{ nome: string; deve_alterar_senha: boolean }>('/api/auth/login', {
+      codigo: this.code, senha: this.password
     }, { withCredentials: true }).pipe(
       timeout(10000),
       finalize(() => { this.loading = false; this.cdr.detectChanges(); })
     ).subscribe({
-      next: () => { void this.router.navigate(['/contrato']); },
+      next: result => { void this.router.navigate([result.deve_alterar_senha ? '/alterar-senha' : '/contrato']); },
       error: (error: unknown) => {
         const status = error instanceof HttpErrorResponse ? error.status : 0;
         this.apiError = status === 401
-          ? 'E-mail, matrícula ou senha inválidos.'
+          ? 'Código ou senha inválidos.'
+          : status === 429
+            ? 'Muitas tentativas. Aguarde 15 minutos e tente novamente.'
           : status === 0
             ? 'O servidor não respondeu. Verifique se o backend está iniciado.'
             : 'Não foi possível entrar agora. Tente novamente.';

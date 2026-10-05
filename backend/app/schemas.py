@@ -1,16 +1,11 @@
-from pydantic import BaseModel, EmailStr, Field
-
-class CadastroEntrada(BaseModel):
-    nome: str = Field(min_length=2, max_length=160)
-    matricula: str = Field(min_length=2, max_length=50)
-    email: EmailStr
-    telefone: str | None = Field(default=None, max_length=30)
-    senha: str = Field(min_length=8, max_length=128)
+from pydantic import BaseModel, Field
 
 class LoginEntrada(BaseModel):
-    email: str = Field(min_length=2, max_length=254)
-    senha: str
+    codigo: str = Field(pattern=r"^\d{4}$")
+    senha: str = Field(min_length=8, max_length=128)
 
 class RecuperacaoEntrada(BaseModel):
-    matricula: str
-    email: EmailStr
+    codigo: str = Field(pattern=r"^\d{4}$")
+
+class AlteracaoSenhaEntrada(BaseModel):
+    nova_senha: str = Field(min_length=8, max_length=128)

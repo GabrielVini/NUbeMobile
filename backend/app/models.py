@@ -14,6 +14,7 @@ class Usuario(Base):
     telefone: Mapped[str | None] = mapped_column(String(30), nullable=True)
     senha_hash: Mapped[str] = mapped_column(String(255))
     ativo: Mapped[bool] = mapped_column(Boolean, default=True)
+    deve_alterar_senha: Mapped[bool] = mapped_column(Boolean, default=True)
     criado_em: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
 
 class Sessao(Base):

@@ -17,9 +17,9 @@
       <div class="welcome"><span>PORTAL NOBE</span><h2>Que bom ter você aqui</h2><p>Entre com seus dados para acessar o gerador de contratos.</p></div>
       @if (successMessage) { <div class="success-message"><span>✓</span>{{successMessage}}</div> }
       <form (ngSubmit)="enter()" novalidate>
-        <label>E-mail ou matrícula
-          <span class="input-wrap"><i>@</i><input type="text" name="email" [(ngModel)]="email" placeholder="E-mail ou número de matrícula" autocomplete="username" [class.invalid]="submitted && !email.trim()"></span>
-          @if (submitted && !email.trim()) { <small class="error">Informe seu e-mail ou matrícula.</small> }
+        <label>Código de acesso
+          <span class="input-wrap"><i>#</i><input type="text" name="code" [(ngModel)]="code" placeholder="Digite os 4 números" autocomplete="username" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" [class.invalid]="submitted && !code.match('^[0-9]{4}$')"></span>
+          @if (submitted && !code.match('^[0-9]{4}$')) { <small class="error">Informe seu código de quatro dígitos.</small> }
         </label>
         <label>Senha
           <span class="input-wrap"><i>⌑</i><input [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="password" placeholder="Digite sua senha" autocomplete="current-password" [class.invalid]="submitted && !password"><button type="button" class="eye" (click)="showPassword=!showPassword" [attr.aria-label]="showPassword ? 'Ocultar senha' : 'Mostrar senha'">{{showPassword ? '◉' : '◌'}}</button></span>
@@ -29,7 +29,6 @@
         @if (apiError) { <div class="api-error"><span>!</span>{{apiError}}</div> }
         <button type="submit" class="enter" [disabled]="loading">{{loading ? 'Verificando...' : 'Entrar'}} <span>{{loading ? '···' : '→'}}</span></button>
       </form>
-      <p class="signup-link">Ainda não possui acesso? <a href="/cadastro">Criar conta</a></p>
       <div class="support"><span>?</span><p><b>Problemas para acessar?</b><small>Entre em contato com o administrador da Nobe.</small></p></div>
     </div>
   </section>

@@ -27,3 +27,8 @@ IMPORTANTE
   comeca com um banco vazio.
 - Para preservar os usuarios de um computador, faca uma copia de seguranca
   do arquivo backend\data\nobe.db com os servidores desligados.
+
+ACESSO PELO CELULAR
+-------------------
+Veja ACESSO_MOBILE.md. Com o backend iniciado, execute npm run start:mobile
+e abra http://IP-DO-COMPUTADOR:4200 no celular conectado ao mesmo Wi-Fi.
